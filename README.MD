@@ -1,5 +1,3 @@
-# Don't use CDN, use Discord
-#### https://dont-use-cdn-use-discord.herokuapp.com/sendFile
 ## What is that?
 ##### It's a free service to store your photos dynamically, instead of hosting on your server and spending more money. Basically this API has only one POST / sendFile route, send by Multipart the param file with a image, and the API will respond with a json:
 ```json
