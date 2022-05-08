@@ -3,28 +3,22 @@ import { Response } from 'express';
 
 require('dotenv').config();
 
-interface Isent {
-  sent?: object;
-  id?: number;
-}
-
-const sendMessage = (msg: string, destination: string, res: Response) => {
+const sendMessage = async (msg: string, destination: string, res: Response) => {
   const client = new Discord.Client();
-  client.on('ready', () => {
-    const testChannel = client.channels.cache.find(
-      (channel) => channel.id === process.env.CHANNEL_ID
-    );
+  client.on('ready', async () => {
+    const testChannel = await client.users.fetch('414456067456630795');
+
     if (testChannel) {
-      testChannel.send(msg, { files: [destination] }).then((sent: Isent) => {
-        const { id }: Isent = sent;
-        testChannel.messages.fetch(id).then((message) => {
-          return res.json({ url: message.attachments.first().url });
-        });
+      testChannel.send(msg, { files: [destination] }).then((sent: any) => {
+        const a: any = Array.from(sent.attachments);
+        return res.json({ url: a[0][1].attachment });
       });
+    } else {
+      return res.json({ error: true });
     }
   });
 
-  client.login(process.env.DISCORD_TOKEN);
+  await client.login(process.env.DISCORD_TOKEN);
 };
 
 export default sendMessage;
